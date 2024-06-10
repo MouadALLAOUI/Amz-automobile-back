@@ -3,34 +3,54 @@
 namespace App\Http\Controllers;
 
 use App\Models\Client;
-use App\Models\Task;
-use App\Models\Vehicule;
 use Illuminate\Http\Request;
 
 class ClientController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        $clients = Client::all();
-        foreach ($clients as $client) {
-            // add to json another attribute userRole
-            $cars = Vehicule::where('id', '=', $client->vehicule_id)->get();
-            foreach ($cars as $car) {
-                $car->setAttribute("cars_make", $car->carsMake);
-                $car->setAttribute("cars_model", $car->carsModel);
-            }
-            $tasks = Task::where('id', '=', $client->task_id)->get();
-            foreach ($tasks as $task) {
-                $task->setAttribute("assigned_to", $task->assignedTo);
-                $task->setAttribute("created_by", $task->createdBy);
-            }
-            $client->setAttribute("task", $tasks);
-            $client->setAttribute("vehicule", $cars);
-            $client->setHidden(['created_at', 'updated_at', 'vehicule_id', 'task_id']);
-        }
-        return response()->json($clients);
+        $client = Client::all();
+        return response()->json($client);
+    }
+
+    public function store(Request $request)
+    {
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:clients',
+            'telephone' => 'required|string|max:15',
+        ]);
+
+        $client = Client::create($validatedData);
+        return response()->json($client, 201);
+    }
+
+    public function show($id)
+    {
+        $client = Client::findOrFail($id);
+        return response()->json($client);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $client = Client::findOrFail($id);
+
+        $validatedData = $request->validate([
+            'name' => 'sometimes|string|max:255',
+            'email' => 'sometimes|string|email|max:255|unique:clients,email,' . $client->id,
+            'telephone' => 'sometimes|string|max:15',
+        ]);
+
+        $client->update($validatedData);
+
+        return response()->json($client, 200);
+    }
+
+    public function destroy($id)
+    {
+        $client = Client::findOrFail($id);
+        $client->delete();
+
+        return response()->json(null, 204);
     }
 }

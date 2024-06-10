@@ -18,10 +18,9 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'nom',
+        'name',
         'email',
         'email_verified_at',
-        'password',
         'status',
         'role_id',
     ];
@@ -54,7 +53,7 @@ class User extends Authenticatable
 
     public function role()
     {
-        return $this->belongsTo(Role::class)->withDefault();
+        return $this->belongsTo(Role::class);
     }
 
     public function getRole()
@@ -68,5 +67,15 @@ class User extends Authenticatable
         } else if ($this->role->id === 4) {
             return "CLIENT";
         }
+    }
+
+    public function tasksCreated()
+    {
+        return $this->hasMany(Task::class, 'created_by');
+    }
+
+    public function tasksAssigned()
+    {
+        return $this->hasMany(Task::class, 'assigned_to');
     }
 }

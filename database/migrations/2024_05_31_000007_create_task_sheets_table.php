@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('vehicules', function (Blueprint $table) {
+        Schema::create('task_sheets', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('immatriculation');
-            $table->integer('kilometrage');
-            $table->foreignId('model')->constrained('cars_models');
-            $table->foreignId('vehicule')->constrained('cars_makes');
+            $table->timestamp('entree')->nullable();
+            $table->timestamp('sortie')->nullable();
+            $table->text('details')->nullable();
+            $table->foreignId('task_id')->constrained('tasks');
             $table->timestamps();
         });
     }
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('vehicules');
+        Schema::dropIfExists('task_sheets');
     }
 };

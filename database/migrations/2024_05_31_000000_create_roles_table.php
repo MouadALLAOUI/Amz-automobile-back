@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('roles', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->enum('type', ['DEV', 'ADMIN', 'EMPLOYE', 'CLIENT']);
             $table->string("description");
+            $table->enum('type', ['DEV', 'ADMIN', 'EMPLOYE']);
             $table->timestamps();
         });
     }

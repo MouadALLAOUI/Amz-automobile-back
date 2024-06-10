@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tasks', function (Blueprint $table) {
+        Schema::create('auto_parts', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('title');
-            $table->text('description');
-            $table->enum('status', ['pending', 'in_progress', 'completed']);
-            $table->foreignId('assigned_to')->constrained('users');
-            $table->foreignId('created_by')->constrained('users');
+            $table->string('name');
+            $table->string('part_number')->unique();
+            $table->text('description')->nullable();
+            $table->string('price');
+            $table->integer('stock_quantity');
             $table->timestamps();
         });
     }
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tasks');
+        Schema::dropIfExists('auto_parts');
     }
 };

@@ -20,13 +20,12 @@ class TaskController extends Controller
     public function index()
     {
         $tasks = Task::all();
-        foreach ($tasks as $task) {
-            // add to json another attribute userRole
-            $task->setAttribute("assigned_to", $task->assignedTo);
-            $task->setAttribute("created_by", $task->createdBy);
-            $task->setAttribute("clients", $task->clients);
-        }
         return response()->json($tasks);
+    }
+
+    public function show($id)
+    {
+        return response()->json(Task::findOrFail($id));
     }
 
     /**
@@ -34,30 +33,8 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
-        $messages = [
-            "required" => "le champ :attribute est obligatoire.",
-        ];
-        $attributes = [
-            "title" => "string",
-            "description" => "string",
-        ];
-        $validator = Validator::make($request->all(), [
-            "title" => ["required", "integer"],
-        ], $messages, $attributes);
-
-        if ($validator->fails()) {
-            return response()->json(["status" => "error", "error" => $validator->errors()]);
-        }
-
-        $task = new Task();
-        $task->title = $request->title;
-        $task->description = $request->description;
-        $task->status = 'pending';
-        $task->assigned_to = $request->assigned_to;
-        $task->created_by = $request->created_by;
-        $task->save();
-
-        return response()->json(["status" => "success", "message" => "la tache a été bien ajouté", "taches" => Task::all()]);
+        $task = Task::create($request->all());
+        return response()->json($task, 201);
     }
     public function full_store(Request $request)
     {
@@ -66,7 +43,7 @@ class TaskController extends Controller
             "date" => "le champ :attribute doit être une date valide.",
             "string" => "le champ :attribute doit être une chaine de caractères.",
             "in" => "la valeur du champ :attribute n'st pas valide.",
-            "integer" => "le champ :attribute un nombre entier.",
+            "integer" => "le champ :attribute doit être un nombre entier.",
             "email" => "l'email choisi n'est pas valide.",
             "unique" => "l'email choisi est déjà pris",
             "min" => [
@@ -144,5 +121,18 @@ class TaskController extends Controller
         } catch (\Exception $e) {
             return response()->json(["status" => "error", "error" => $e]);
         }
+    }
+
+    public function update(Request $request, $id)
+    {
+        $task = Task::findOrFail($id);
+        $task->update($request->all());
+        return response()->json($task, 200);
+    }
+
+    public function destroy($id)
+    {
+        Task::destroy($id);
+        return response()->json(null, 204);
     }
 }
