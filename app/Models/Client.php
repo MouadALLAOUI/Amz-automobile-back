@@ -9,25 +9,19 @@ class Client extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'nom',
+        'name',
         'email',
         'telephone',
-        'vehicule_id',
-        'task_id',
     ];
 
     protected $hidden = ['created_at', 'updated_at'];
-    public function task()
+    public function tasks()
     {
-        return $this->belongsTo(Task::class)->withDefault();
+        return $this->hasMany(Task::class);
     }
 
-    public function vehicule()
+    public function vehicules()
     {
-        return $this->belongsTo(Vehicule::class)->withDefault();
-    }
-    public function taskSheets()
-    {
-        return $this->hasMany(Task_sheet::class);
+        return $this->hasMany(Vehicule::class);
     }
 }

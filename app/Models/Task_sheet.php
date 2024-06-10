@@ -10,26 +10,19 @@ class Task_sheet extends Model
     use HasFactory;
 
     protected $fillable = [
-        'num_matricule',
-        'vehicule_id',
-        'client_id',
+        'task_id',
         'entree',
         'sortie',
-        'info',
+        'details',
     ];
     protected $hidden = [
         'created_at',
         'updated_at',
     ];
 
-    public function vehicule()
+    public function task()
     {
-        return $this->belongsTo(Vehicule::class);
-    }
-
-    public function client()
-    {
-        return $this->belongsTo(Client::class);
+        return $this->belongsTo(Task::class);
     }
 
     public function operations()

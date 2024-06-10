@@ -11,19 +11,21 @@ class Vehicule extends Model
 
     protected $table = 'vehicules';
     protected $fillable = [
-        'vehicule',
-        'immatriculation',
+        'num_matricule',
+        'marque',
+        'client_id',
         'kilometrage',
-        'model',
+        'model_id',
+        'makes_id'
     ];
     protected $hidden = [
         'created_at',
         'updated_at',
     ];
 
-    public function clients()
+    public function client()
     {
-        return $this->hasMany(Client::class);
+        return $this->belongsTo(Client::class);
     }
 
     public function taskSheets()
@@ -31,12 +33,12 @@ class Vehicule extends Model
         return $this->hasMany(Task_sheet::class);
     }
 
-    public function carsMake()
+    public function carMake()
     {
-        return $this->belongsTo(CarsMake::class, 'vehicule')->withDefault();
+        return $this->belongsTo(CarsMake::class, 'makes_id');
     }
-    public function carsModel()
+    public function carModel()
     {
-        return $this->belongsTo(CarsMake::class, 'model')->withDefault();
+        return $this->belongsTo(CarsModel::class, 'model_id');
     }
 }

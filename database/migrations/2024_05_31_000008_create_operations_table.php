@@ -11,13 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('auto_parts', function (Blueprint $table) {
+        Schema::create('operations', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name');
-            $table->string('part_number');
+            $table->string('name')->nullable();
             $table->text('description')->nullable();
-            $table->string('price');
-            $table->integer('stock_quantity');
+            $table->string('tps')->nullable();
+            $table->text('operations_realisees')->nullable();
+            $table->text('observations')->nullable();
+            $table->foreignId('task_sheet_id')->constrained('task_sheets');
             $table->timestamps();
         });
     }
@@ -27,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('auto_parts');
+        Schema::dropIfExists('operations');
     }
 };

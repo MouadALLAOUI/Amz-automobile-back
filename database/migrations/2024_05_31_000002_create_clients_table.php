@@ -13,11 +13,9 @@ return new class extends Migration
     {
         Schema::create('clients', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('nom');
+            $table->string('name');
             $table->string('email')->unique();
             $table->string('telephone')->nullable();
-            $table->foreignId('vehicule_id')->constrained('vehicules');
-            $table->foreignId('task_id')->constrained('tasks');
             $table->timestamps();
         });
     }

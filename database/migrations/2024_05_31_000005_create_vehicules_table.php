@@ -11,12 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('operations', function (Blueprint $table) {
+        Schema::create('vehicules', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->foreignId('task_sheet_id')->constrained('task_sheets');
-            $table->string('tps');
-            $table->text('operations_realisees');
-            $table->text('observations')->nullable();
+            $table->string('immatriculation');
+            $table->integer('kilometrage');
+            $table->foreignId('client_id')->constrained('clients');
+            $table->foreignId('model_id')->constrained('cars_models');
+            $table->foreignId('makes_id')->constrained('cars_makes');
             $table->timestamps();
         });
     }
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('operations');
+        Schema::dropIfExists('vehicules');
     }
 };

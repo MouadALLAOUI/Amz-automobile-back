@@ -13,6 +13,8 @@ class Task extends Model
         'title',
         'description',
         'status',
+        'client_id',
+        'vehicule_id',
         'assigned_to',
         'created_by',
     ];
@@ -21,18 +23,27 @@ class Task extends Model
         'updated_at',
     ];
 
-    public function assignedTo()
+    public function client()
+    {
+        return $this->belongsTo(Client::class);
+    }
+
+    public function vehicule()
+    {
+        return $this->belongsTo(Vehicule::class);
+    }
+
+    public function taskSheets()
+    {
+        return $this->hasMany(Task_sheet::class);
+    }
+    public function assignee()
     {
         return $this->belongsTo(User::class, 'assigned_to');
     }
 
-    public function createdBy()
+    public function creator()
     {
         return $this->belongsTo(User::class, 'created_by');
-    }
-
-    public function clients()
-    {
-        return $this->hasMany(Client::class, 'task_id');
     }
 }

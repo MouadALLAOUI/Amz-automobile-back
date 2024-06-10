@@ -10,10 +10,12 @@ class Operation extends Model
     use HasFactory;
 
     protected $fillable = [
-        'task_sheet_id',
+        'name',
+        'description',
         'tps',
         'operations_realisees',
         'observations',
+        'task_sheet_id',
     ];
     protected $hidden = [
         'created_at',
@@ -23,5 +25,10 @@ class Operation extends Model
     public function taskSheet()
     {
         return $this->belongsTo(Task_sheet::class);
+    }
+
+    public function autoParts()
+    {
+        return $this->belongsToMany(Auto_part::class);
     }
 }
